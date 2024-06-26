@@ -11,13 +11,13 @@ public class EmployeeTests
             MockData.String, MockData.String,
             MockData.String, MockData.String,
             MockData.String, MockData.Date,
-            [MockData.String], MockData.String);
+            null, MockData.String);
 
         var dto = new EmployeeDto(MockData.PositiveInt,
             MockData.String, MockData.String,
             MockData.String, MockData.String,
             MockData.String, MockData.Date,
-            [MockData.String], MockData.String);
+            null, MockData.String);
 
         Assert.Equal(employee.ToDto(), dto);
     }

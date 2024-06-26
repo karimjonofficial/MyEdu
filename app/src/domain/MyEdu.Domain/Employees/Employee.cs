@@ -11,6 +11,7 @@ public class Employee(int id, string name, string surname,
 {
     public override EmployeeDto ToDto()
     {
-        throw new NotImplementedException();
+        return new EmployeeDto(id, name, surname, patronymic,
+            phone, address, birthDate, images, description);
     }
 }
