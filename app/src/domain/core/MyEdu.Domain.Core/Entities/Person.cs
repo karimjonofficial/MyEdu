@@ -1,8 +1,18 @@
-﻿namespace MyEdu.Domain.Core.Entities;
+﻿using MyEdu.Domain.Core.Exceptions;
 
-public abstract class Person(int id, string name, string surname, string patronymic, string phone,
-    string address, DateTimeOffset birthdate, string imageUrl, string description) :
-    NamedEntity(id, name, imageUrl, description)
+namespace MyEdu.Domain.Core.Entities;
+
+public abstract class Person<TDto> : PhysicalEntity<TDto>
 {
-    public int GetAge() => DateTimeOffset.Now.Year - birthdate.Year;
+    protected Person(int id, string name, string? surname,
+        string? patronymic, string? phone, string? address,
+        DateTimeOffset? birthDate, List<string>? images,
+        string? description)
+        : base(id, images, description)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new IllegalNameException();
+        if (birthDate != null && birthDate > DateTimeOffset.Now)
+            throw new IllegalDateTimeException();
+    }
 }

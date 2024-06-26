@@ -1,25 +1,42 @@
-﻿using Moq;
-using MyEdu.Domain.Core.Entities;
+﻿using MyEdu.Domain.Core.Entities;
+using MyEdu.Domain.Core.Exceptions;
 
 namespace MyEdu.Domain.Core.Tests.Entities;
 
 public class PersonTests
 {
     [Fact]
-    public void ReturnsAge_WhenGivenIsCorrect()
+    public void Throws_WhenWhiteSpace()
     {
-        // Arrange
-        var birthdate = new DateTimeOffset(new DateTime(2000, 1, 1));
-        var mock = new Mock<Person>(MockBehavior.Strict, 1, "John", "Doe", "Patronymic", "1234567890", "Address", birthdate, "ImageUrl", "Description")
-            {
-                CallBase = true
-            };
+        Assert.Throws<IllegalNameException>(() =>
+        {
+            var test = new TestClass(MockData.PositiveInt,
+                MockData.WhiteSpace, MockData.String,
+                MockData.String, MockData.String,
+                MockData.String, MockData.Date,
+                [MockData.String], MockData.String);
+        });
 
-        // Act
-        var age = mock.Object.GetAge();
+        Assert.Throws<IllegalDateTimeException>(() =>
+        {
+            var test = new TestClass(MockData.PositiveInt,
+                MockData.WhiteSpace, MockData.String,
+                MockData.String, MockData.String,
+                MockData.String, DateTimeOffset.Now.AddDays(1),
+                [MockData.String], MockData.String);
+        });
+    }
 
-        // Assert
-        var expectedAge = DateTimeOffset.Now.Year - birthdate.Year;
-        Assert.Equal(expectedAge, age);
+    private class TestClass(int id, string name, string surname,
+        string patronymic, string phone, string address,
+        DateTimeOffset birthDate, List<string> images,
+        string description)
+        : Person<int>(id, name, surname, patronymic, phone, address,
+            birthDate, images, description)
+    {
+        public override int ToDto()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

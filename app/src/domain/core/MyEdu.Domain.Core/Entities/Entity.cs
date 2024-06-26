@@ -1,6 +1,12 @@
-﻿namespace MyEdu.Domain.Core.Entities;
+﻿using MyEdu.Domain.Core.Exceptions;
 
-public abstract class Entity(int id)
+namespace MyEdu.Domain.Core.Entities;
+
+public abstract class Entity<TDto>
 {
-    public int GetId() => id;
+    protected Entity(int id)
+    {
+        if(id < 0) throw new IllegalIdException();
+    }
+    public abstract TDto ToDto();
 }
